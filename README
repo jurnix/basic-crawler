@@ -1,0 +1,8 @@
+basic-crawler save's website structure to a file called 'structure.txt'. You can interrupt the crawling at any time using Ctrl+C. Consequently, state.data is created saving crawler script state. To resume, call "-resume" command.
+
+Usage guide: crawler.py [-l level_of_depth]
+
+Example: python crawler.py http://www.horaris.net -l 2
+
+python crawler.py -resume
+
