@@ -5,12 +5,7 @@ import urllib2
 import argparse
 from BeautifulSoup import BeautifulSoup
 
-
-# Arguments logic
-parser = argparse.ArgumentParser(description='Web crawler')
-parser.add_argument('website', nargs='?', action='store', help='website to crawl')
-parser.add_argument('-l', action='store', default=2, help='maximum depth level to crawl')
-parser.add_argument('-resume', action='store_const', const=32, help='resume crawler')
+from utils import savefile, loadfile
 
 crawler_state = None    # save Crawler class
 interrupted = False     # Stop while
@@ -33,6 +28,9 @@ def signal_handler(signal, frame):
 
     
 class Crawler(object):
+    """
+    Crawler class
+    """
     
     def __init__(self, url, depth):
         self.maxdepth = depth
@@ -99,30 +97,27 @@ class Fetch(object):
         for link in links:            
             try:
                 raw_link = link['href']
-                if ("http://" in raw_link or "https://" in raw_link) and raw_link.startswith("http"):
+                
+                if ("http://" in raw_link or \
+                    "https://" in raw_link) and \
+                    raw_link.startswith("http"):
+                        
                     output.append( raw_link )
             except:                
                 pass
             
         return output
 
-# --------------------------------------------        
-#               IO operations
 
-def savefile(filename, data):
-    f = open(filename, 'w')
-    f.write(data)
-    f.close()
-    
-def loadfile(filename):
-    f = open(filename, 'r')
-    output = f.read()
-    f.close()
-    return output
-# --------------------------------------------
     
 def main():
-    
+
+    # Arguments logic
+    parser = argparse.ArgumentParser(description='Web crawler')
+    parser.add_argument('website', nargs='?', action='store', help='website to crawl')
+    parser.add_argument('-l', action='store', default=2, help='maximum depth level to crawl')
+    parser.add_argument('-resume', action='store_const', const=32, help='resume crawler')
+
     global crawler_state
     
     # Arguments parser
